@@ -12,6 +12,7 @@ class SFClient:
     sfapi_base_url = 'https://moja.superfaktura.sk'
     getpdf_url = '/invoices/pdf/'
     create_invoice_url = '/invoices/create/'
+    view_invoice_url = '/invoices/view/'
     list_invoices_url = '/invoices/index.json'
 
     def __init__(self, email, api_key):
@@ -99,6 +100,15 @@ class SFClient:
         :return:
         """
         return self.send_request("".join([self.getpdf_url, invoice_id, '/token:', token]), json_output=False)
+
+    def view_invoice(self, invoice_id):
+        """
+
+        :param invoice_id:
+        :return:
+        """
+        return self.send_request('%s/%s.json' % (self.view_invoice_url, str(invoice_id)), method='GET')
+
 
     def list_invoices(self, params=None):
         """
