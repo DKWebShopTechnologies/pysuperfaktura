@@ -4,8 +4,8 @@ __author__ = 'backslash7 <lukas.stana@it-admin.sk>'
 
 import json
 import requests
-from exceptions import SFAPIException
-from invoice import SFInvoice, SFInvoiceClient
+from pysuperfaktura.exceptions import SFAPIException
+from pysuperfaktura.invoice import SFInvoice, SFInvoiceClient
 
 
 class SFClient:
