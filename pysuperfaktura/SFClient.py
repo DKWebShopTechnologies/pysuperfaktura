@@ -92,6 +92,15 @@ class SFClient:
 
         return self.send_request(self.create_invoice_url, method='POST', data={'data': json.dumps(data)})
 
+    def set_invoice_language(self, invoice_id, language='slo'):
+        """
+
+        :param invoice_id:
+        :param language:
+        :return:
+        """
+        return self.send_request('/invoices/setinvoicelanguage/%s/lang:%s' % (str(invoice_id), language))
+
     def get_pdf(self, invoice_id, token):
         """
 
