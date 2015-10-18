@@ -1,4 +1,5 @@
 # coding=utf-8
+import logging
 
 __author__ = 'backslash7 <lukas.stana@it-admin.sk>'
 
@@ -7,11 +8,13 @@ import requests
 from pysuperfaktura.exceptions import SFAPIException
 from pysuperfaktura.invoice import SFInvoice, SFInvoiceClient
 
+logger = logging.getLogger('superfakura.api')
 
 class SFClient:
-    sfapi_base_url = 'https://moja.superfaktura.sk'
+    sfapi_base_url = 'https://moje.superfaktura.cz'
     getpdf_url = '/invoices/pdf/'
     create_invoice_url = '/invoices/create/'
+    create_contact_url = '/clients/create/'
     view_invoice_url = '/invoices/view/'
     list_invoices_url = '/invoices/index.json'
 
@@ -70,7 +73,8 @@ class SFClient:
         if json_output:
             returned_string = json.loads(req.text)
             if 'error' in returned_string and returned_string['error'] == 1:
-                raise SFAPIException('Error while creating invoice %(error_message)s' % returned_string)
+                logging.error("Error message {}".format(req.content))
+                raise SFAPIException('Error while call: %(error_message)s' % returned_string)
             else:
                 return returned_string
         else:
@@ -91,6 +95,21 @@ class SFClient:
             data['InvoiceItem'].append(item.params)
 
         return self.send_request(self.create_invoice_url, method='POST', data={'data': json.dumps(data)})
+
+    def create_contact(self, contact):
+        """
+        Vytvorí v SF kontakt
+        :param contact: Objekt kontaktu
+        :type contact: SFInvoiceClient
+        :return: :raise:
+        """
+        if not isinstance(contact, SFInvoiceClient):
+            raise SFAPIException('Passed invoice is not SFInvoiceClient instance!')
+
+        data = {'Client': contact.params }
+
+        return self.send_request(self.create_contact_url , method='POST', data={'data': json.dumps(data)})
+
 
     def set_invoice_language(self, invoice_id, language='slo'):
         """
