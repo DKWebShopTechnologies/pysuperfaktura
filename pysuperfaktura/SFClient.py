@@ -17,6 +17,7 @@ class SFClient:
     create_contact_url = '/clients/create/'
     view_invoice_url = '/invoices/view/'
     list_invoices_url = '/invoices/index.json'
+    add_payment_url =  '/invoice_payments/add/ajax:1/api:1'
 
     def __init__(self, email, api_key):
         """
@@ -94,7 +95,16 @@ class SFClient:
         for item in invoice.items:
             data['InvoiceItem'].append(item.params)
 
-        return self.send_request(self.create_invoice_url, method='POST', data={'data': json.dumps(data)})
+        retv = self.send_request(self.create_invoice_url, method='POST', data={'data': json.dumps(data)})
+        if retv['error'] == 0:
+            invoice_id = retv['data']['Invoice']['id']
+            logger.info('Created invoice id {}'.format(invoice_id))
+            invoice.id = invoice_id
+        else:
+            err_no = retv['error']
+            err_msg = retv['error_message']
+            logger.error('Unable to create invoice - errors {} {}'.format(err_no, err_msg))
+        return retv
 
     def create_contact(self, contact):
         """
@@ -200,3 +210,9 @@ class SFClient:
         :return:
         """
         return self.list_invoices(params={'status': '3'})
+
+    def get_invoice(self, invoice_id):
+        logger.debug("Loading invoice {}".format(invoice_id))
+        invoice_url = '/invoices/view/%s.json' % invoice_id
+        retv = self.send_request(action=invoice_url, method='GET')
+        return SFInvoice(client=self, params=retv)

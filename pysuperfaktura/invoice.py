@@ -20,6 +20,7 @@ class SFInvoice:
         self.client = client
         self.params = params
         self.items = items
+        self.id = params.get('id', None)
 
     def add_item(self, item):
         """
@@ -34,6 +35,21 @@ class SFInvoice:
             self.items = [item]
 
 
+
+
 class SFInvoiceClient:
     def __init__(self, params):
         self.params = params
+
+class SFInvoicePayment:
+    def __init__(self, invoice, params):
+        self.client = invoice.client
+        self.invoice = invoice
+        self.params = params
+        self.params['invoice_id'] = invoice.id
+
+    def save(self):
+        invoice = self.invoice
+        data = {'Client': invoice.client.params, 'Invoice': invoice.params, 'InvoiceItem': []}
+
+        retv = self.send_request('invoice_payments/add/ajax:1/api:1', method='POST', data={'data': json.dumps(data)})
