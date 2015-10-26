@@ -14,6 +14,7 @@ class SFClient:
     sfapi_base_url = 'https://moje.superfaktura.cz'
     getpdf_url = '/invoices/pdf/'
     create_invoice_url = '/invoices/create/'
+    create_expense_url = '/expenses/add/'
     create_contact_url = '/clients/create/'
     view_invoice_url = '/invoices/view/'
     list_invoices_url = '/invoices/index.json'
