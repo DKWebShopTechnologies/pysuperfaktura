@@ -5,7 +5,7 @@ Python API connector pre projekt superfaktura.sk
 
 Inštalácia
 ----------
-    pip install https://github.com/backslash7/pysuperfaktura/archive/master.zip
+    pip install git+git://github.com/EndevelCZ/pysuperfaktura
 
 Vytvorenie faktúry
 ------------------
