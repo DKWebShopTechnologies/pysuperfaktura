@@ -117,13 +117,13 @@ class SFClient:
             data['InvoiceItem'].append(item.params)
 
         retv = self.send_request(self.edit_invoice_url, method='POST', data={'data': json.dumps(data)})
-        if retv['error'] == 0:
+        if retv.get('error', 0) == 0:
             invoice_id = retv['data']['Invoice']['id']
-            logger.info('Created invoice id {}'.format(invoice_id))
+            logger.info('Updated invoice id {}'.format(invoice_id))
             invoice.id = invoice_id
         else:
-            err_no = retv['error']
-            err_msg = retv['error_message']
+            err_no = retv.get('error', None)
+            err_msg = retv.get('error_message', None)
             logger.error('Unable to update invoice - errors {} {}'.format(err_no, err_msg))
         return retv
 
