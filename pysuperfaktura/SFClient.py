@@ -17,6 +17,7 @@ class SFClient:
     create_expense_url = '/expenses/add/'
     create_contact_url = '/clients/create/'
     view_invoice_url = '/invoices/view/'
+    edit_invoice_url = 'invoices/edit/'
     list_invoices_url = '/invoices/index.json'
     add_payment_url =  '/invoice_payments/add/ajax:1/api:1'
 
@@ -105,6 +106,25 @@ class SFClient:
             err_no = retv['error']
             err_msg = retv['error_message']
             logger.error('Unable to create invoice - errors {} {}'.format(err_no, err_msg))
+        return retv
+
+    def edit_invoice(self, invoice):
+        if not isinstance(invoice, SFInvoice):
+            raise SFAPIException('Passed invoice is not SFInvoice instance!')
+
+        data = {'Invoice': invoice.params, 'InvoiceItem': []}
+        for item in invoice.items:
+            data['InvoiceItem'].append(item.params)
+
+        retv = self.send_request(self.edit_invoice_url, method='POST', data={'data': json.dumps(data)})
+        if retv['error'] == 0:
+            invoice_id = retv['data']['Invoice']['id']
+            logger.info('Created invoice id {}'.format(invoice_id))
+            invoice.id = invoice_id
+        else:
+            err_no = retv['error']
+            err_msg = retv['error_message']
+            logger.error('Unable to update invoice - errors {} {}'.format(err_no, err_msg))
         return retv
 
     def create_contact(self, contact):
