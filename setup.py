@@ -2,9 +2,9 @@ from distutils.core import setup
 
 setup(
     name='pysuperfaktura',
-    version='0.6a',
+    version='0.6b',
     packages=['pysuperfaktura'],
-    url='https://github.com/backslash7/pysuperfaktura',
+    url='https://github.com/EndevelCZ/pysuperfaktura',
     license='BSD',
     author='backslash7',
     author_email='lukas.stana@it-admin.sk',
