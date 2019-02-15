@@ -19,7 +19,8 @@ class SFClient:
     view_invoice_url = '/invoices/view/'
     edit_invoice_url = 'invoices/edit/'
     list_invoices_url = '/invoices/index.json'
-    add_payment_url =  '/invoice_payments/add/ajax:1/api:1'
+    add_payment_url = '/invoice_payments/add/ajax:1/api:1'
+    delete_item_url = '/invoice_items/delete/{}/invoice_id:{}'
 
     def __init__(self, email, api_key):
         """
@@ -125,6 +126,17 @@ class SFClient:
             err_no = retv.get('error', None)
             err_msg = retv.get('error_message', None)
             logger.error('Unable to update invoice - errors {} {}'.format(err_no, err_msg))
+        return retv
+
+    def delete_item(self, invoice_id, item_id):
+        retv = self.send_request(self.delete_item_url.format(item_id, invoice_id), method='GET')
+        if retv.get('error', 0) == 0:
+            invoice_id = retv['data']['Invoice']['id']
+            logger.info('Deleted item id {}'.format(invoice_id))
+        else:
+            err_no = retv.get('error', None)
+            err_msg = retv.get('error_message', None)
+            logger.error('Unable to delete item - errors {} {}'.format(err_no, err_msg))
         return retv
 
     def create_contact(self, contact):
