@@ -11,7 +11,7 @@ from pysuperfaktura.invoice import SFInvoice, SFInvoiceClient
 logger = logging.getLogger('superfakura.api')
 
 class SFClient:
-    sfapi_base_url = 'https://moje.superfaktura.cz'
+    sfapi_base_url = 'https://moja.superfaktura.sk'
     getpdf_url = '/invoices/pdf/'
     create_invoice_url = '/invoices/create/'
     create_expense_url = '/expenses/add/'

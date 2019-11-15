@@ -3,11 +3,11 @@ pysuperfaktura
 
 Python API connector pre projekt superfaktura.sk
 
-Inštalácia
+Installation
 ----------
-    pip install git+git://github.com/EndevelCZ/pysuperfaktura
+    pip install git+git://github.com/DKWebShopTechnologies/pysuperfaktura
 
-Vytvorenie faktúry
+Create an invoice
 ------------------
 ```python
 from pysuperfaktura.SFClient import SFClient
